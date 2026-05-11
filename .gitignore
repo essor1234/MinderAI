@@ -1,0 +1,35 @@
+# --- Environments & Secrets ---
+.env
+.env.local
+.env.*.local
+
+# --- Python & Jupyter ---
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+.ipynb_checkpoints/
+
+# --- Operating System Files ---
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+
+# --- Documentation & Office Files ---
+*.docx
+*.doc
+*.pdf
+
+# --- Data & Logs ---
+data/
+*.log
+
+# --- IDEs & Editors ---
+.vscode/
+.idea/
+*.swp
+*.swo
