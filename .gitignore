@@ -23,7 +23,7 @@ ehthumbs.db
 *.docx
 *.doc
 *.pdf
-
+*.txt
 # --- Data & Logs ---
 data/
 *.log
@@ -33,3 +33,5 @@ data/
 .idea/
 *.swp
 *.swo
+
+weird_files_from_AI_agent
