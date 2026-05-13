@@ -14,7 +14,8 @@ MinderAI is a co-worker agent that acquires, verifies, and documents tribal know
 
 ### Pipeline Structure
 
-> _(Pipeline diagram — upload your image here)_
+<img width="600" alt="MinderAI Pipeline" src="https://github.com/user-attachments/assets/1809cb34-f9fc-4abb-86e9-3830a2671a61" />
+_
 
 The pipeline runs in 7 phases each time the user sends a message:
 
