@@ -21,6 +21,7 @@ class AgentResponder:
             completion = client.chat.completions.create(
                 model=self.chat_model,
                 messages=[{"role": "user", "content": final_prompt}],
+                timeout=30.0,
             )
             return completion.choices[0].message.content
         except Exception as e:

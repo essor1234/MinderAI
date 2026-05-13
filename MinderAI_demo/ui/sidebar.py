@@ -20,7 +20,9 @@ def get_available_pipelines() -> dict:
 
 
 def _reinit_pipeline(memory_file: str, pipeline_class, score_model: str,
-                     chat_model: str, embedding_model: str):
+                     chat_model: str, embedding_model: str,
+                     reflection_model: str = "qwen-plus",
+                     plan_model: str = "qwen-plus"):
     """Create a new pipeline instance and reset memory-related state."""
     try:
         st.session_state.pipeline = pipeline_class(
@@ -28,11 +30,14 @@ def _reinit_pipeline(memory_file: str, pipeline_class, score_model: str,
             score_model=score_model,
             chat_model=chat_model,
             embedding_model=embedding_model,
+            reflection_model=reflection_model,
+            plan_model=plan_model,
         )
         st.session_state.active_memory_file = memory_file
-        # Reset memory-derived state
+        # Restore persisted reflections; reset everything else
+        pipeline = st.session_state.pipeline
         st.session_state.selected_memories = []
-        st.session_state.reflections = []
+        st.session_state.reflections = pipeline.get_stored_reflections()
         st.session_state.plan = None
         st.session_state.conversation_count = 0
         return True
@@ -72,6 +77,16 @@ def render_sidebar():
                 ["text-embedding-v3", "text-embedding-v2"],
                 index=0,
             )
+            reflection_model = st.selectbox(
+                "Reflection Model (Phase 6 synthesis)",
+                ["qwen-plus", "qwen-turbo", "qwen-max"],
+                index=0,
+            )
+            plan_model = st.selectbox(
+                "Planning Model (Phase 7)",
+                ["qwen-plus", "qwen-turbo", "qwen-max"],
+                index=0,
+            )
             reflection_interval = st.slider(
                 "Reflection Interval (every N conversations)",
                 min_value=1,
@@ -80,6 +95,15 @@ def render_sidebar():
                 help="Phase 6 (Reflection) runs once every N conversations.",
             )
             st.session_state.reflection_interval = reflection_interval
+            st.selectbox(
+                "Phase 6-7 Execution",
+                options=["plan_first", "concurrent"],
+                format_func=lambda x: {
+                    "plan_first": "🔄 Plan → Reflect  (free tier)",
+                    "concurrent": "⚡ Concurrent  (paid tier)",
+                }[x],
+                key="execution_mode",
+            )
 
         st.divider()
 
@@ -102,22 +126,22 @@ def render_sidebar():
 
         feed_clicked = st.button("🔄 Feed Data", use_container_width=True)
 
-        # Auto-initialize on first load (pipeline is None)
+        # No pipeline loaded yet — wait for user to click Feed Data
         if st.session_state.pipeline is None:
-            first_file = chosen_file or DEFAULT_MEMORY_FILE
-            with st.spinner("Loading initial dataset..."):
-                _reinit_pipeline(first_file, pipeline_class,
-                                 score_model, chat_model, embedding_model)
             st.session_state.pipeline_name = selected_pipeline_name
 
         # Reinit when pipeline class changes
         elif selected_pipeline_name != st.session_state.pipeline_name:
             current_file = st.session_state.active_memory_file or DEFAULT_MEMORY_FILE
             with st.spinner("Switching pipeline..."):
-                _reinit_pipeline(current_file, pipeline_class,
-                                 score_model, chat_model, embedding_model)
+                ok = _reinit_pipeline(current_file, pipeline_class,
+                                      score_model, chat_model, embedding_model,
+                                      reflection_model, plan_model)
             st.session_state.pipeline_name = selected_pipeline_name
-            st.success(f"Switched to {selected_pipeline_name}")
+            if ok:
+                st.success(f"Switched to {selected_pipeline_name}")
+                st.session_state.pending_initial_reflection = True
+                st.session_state.background_task_running = True
 
         # Reinit when "Feed Data" is clicked
         if feed_clicked:
@@ -126,9 +150,13 @@ def render_sidebar():
             else:
                 with st.spinner(f"Loading {selected_label}..."):
                     ok = _reinit_pipeline(chosen_file, pipeline_class,
-                                          score_model, chat_model, embedding_model)
+                                          score_model, chat_model, embedding_model,
+                                          reflection_model, plan_model)
                 if ok:
                     st.success(f"✅ Loaded: {selected_label}")
+                    st.session_state.pipeline_name = selected_pipeline_name
+                    st.session_state.pending_initial_reflection = True
+                    st.session_state.background_task_running = True
 
         # ── Memory stats ──────────────────────────────────────────────────────
         st.divider()

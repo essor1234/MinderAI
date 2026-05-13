@@ -21,7 +21,8 @@ from .settings import (
     DEFAULT_REFLECTION_INTERVAL,
     APP_TITLE,
     APP_ICON,
-    client
+    client,
+    make_client,
 )
 
 __all__ = [
@@ -45,5 +46,6 @@ __all__ = [
     "DEFAULT_REFLECTION_INTERVAL",
     "APP_TITLE",
     "APP_ICON",
-    "client"
+    "client",
+    "make_client",
 ]

@@ -4,7 +4,7 @@ import json
 import os
 from typing import List, Dict
 
-from config import EMBEDDING_MODEL, client
+from config import EMBEDDING_MODEL, make_client
 
 
 class LocalVectorStore:
@@ -12,6 +12,7 @@ class LocalVectorStore:
 
     def __init__(self):
         self.records: List[Dict] = []
+        self._client = make_client()
 
     def add_record(self, record: Dict):
         """Add a record to the store, computing embeddings if needed"""
@@ -21,16 +22,26 @@ class LocalVectorStore:
 
     def _embed_text(self, text: str) -> List[float]:
         """Get embedding for text using text-embedding-v3"""
-        response = client.embeddings.create(model=EMBEDDING_MODEL, input=text)
+        response = self._client.embeddings.create(
+            model=EMBEDDING_MODEL, input=text, timeout=30.0
+        )
         return response.data[0].embedding
 
     def query(self, query_embedding: List[float], top_k: int = 10) -> List[Dict]:
-        """Search by embedding and return top-k similar records"""
+        """Search by embedding and return top-k similar records.
+        Only memory and reflection records are searched — plan records
+        have no embeddings and must not pollute similarity results.
+        """
         from utils import cosine_similarity
 
         scored = []
         for record in self.records:
-            score = cosine_similarity(query_embedding, record["embedding"])
+            if record.get("type") not in ("memory", "reflection"):
+                continue
+            emb = record.get("embedding")
+            if not emb:
+                continue
+            score = cosine_similarity(query_embedding, emb)
             scored.append((score, record))
         scored.sort(key=lambda item: item[0], reverse=True)
         return [record for _, record in scored[:top_k]]

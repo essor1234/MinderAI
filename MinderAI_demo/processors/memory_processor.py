@@ -117,7 +117,9 @@ Relevance: [Score]"""
             prompt = self._build_scoring_prompt(memory, current_situation, worker_input)
             try:
                 completion = client.chat.completions.create(
-                    model=self.score_model, messages=[{"role": "user", "content": prompt}]
+                    model=self.score_model,
+                    messages=[{"role": "user", "content": prompt}],
+                    timeout=30.0,
                 )
                 response_text = completion.choices[0].message.content
                 scores = self._extract_scores(response_text)

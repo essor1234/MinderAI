@@ -18,11 +18,16 @@ load_dotenv(dotenv_path=ENV_PATH)
 DASHSCOPE_API_KEY = os.getenv("DASHSCOPE_API_KEY")
 DASHSCOPE_API_URL = os.getenv("DASHSCOPE_API_URL")
 
-# Centralized OpenAI Client
+# Centralized OpenAI Client (main thread only)
 client = OpenAI(
     api_key=DASHSCOPE_API_KEY,
     base_url=DASHSCOPE_API_URL,
 )
+
+
+def make_client() -> OpenAI:
+    """Create a fresh client instance — call once per thread for thread safety."""
+    return OpenAI(api_key=DASHSCOPE_API_KEY, base_url=DASHSCOPE_API_URL)
 
 # File Paths (absolute, anchored to MinderAI_demo/data/)
 DEFAULT_MEMORY_FILE = str(DATA_DIR / "topic1_construction_welding.csv")
@@ -48,7 +53,7 @@ DEFAULT_CONTEXT_WINDOW = 6000
 DEFAULT_SYSTEM_PROMPT_TOKENS = 1500
 DEFAULT_SCORE_THRESHOLD = 2.0
 DEFAULT_TIME_GAP_THRESHOLD = 5
-DEFAULT_REFLECTION_INTERVAL = 5
+DEFAULT_REFLECTION_INTERVAL = 16
 
 # UI Configuration
 APP_TITLE = "Minder AI: Factory Floor Agent"

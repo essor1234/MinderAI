@@ -35,3 +35,9 @@ def initialize_session_state():
         st.session_state.pending_worker_input = None
     if "active_memory_file" not in st.session_state:
         st.session_state.active_memory_file = None
+    if "show_brain" not in st.session_state:
+        st.session_state.show_brain = False
+    if "pending_initial_reflection" not in st.session_state:
+        st.session_state.pending_initial_reflection = False
+    if "execution_mode" not in st.session_state:
+        st.session_state.execution_mode = "plan_first"
