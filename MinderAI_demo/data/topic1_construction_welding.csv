@@ -1,0 +1,22 @@
+Timestamp,Topic,Name,Role,Message
+07:02:15,Construction / Welding Operations,Leo,Entry-Level Welder,Morning everyone. I'm assigned to welding station 3 today.
+07:03:10,Construction / Welding Operations,Mack,Senior Welder,"Heads up Leo, station 3 always overheats on Tuesdays after lunch."
+07:03:45,Construction / Welding Operations,Leo,Entry-Level Welder,"Oh, I didn't see that in the manual. What should I do when it happens?"
+07:04:30,Construction / Welding Operations,Mack,Senior Welder,The official manual won't tell you. You need to drop the current by 5% to keep it stable.
+07:05:15,Construction / Welding Operations,Sarah,Site Manager,"Actually Mack, the new SOP issued last month says if a station overheats, you should power it down completely for 15 minutes."
+07:06:00,Construction / Welding Operations,Mack,Senior Welder,"If we power it down for 15 minutes every time, we'll never hit our quota, Sarah. Dropping it 5% works fine."
+07:06:45,Construction / Welding Operations,Leo,Entry-Level Welder,"Uh, okay. I'll just drop it 5% then?"
+07:07:30,Construction / Welding Operations,Sarah,Site Manager,"No, follow the SOP. Power it down. Safety first."
+07:15:00,Construction / Welding Operations,Mack,Senior Welder,"Man, the safety engineers who write these manuals have never actually worked a day on the floor."
+07:16:20,Construction / Welding Operations,Leo,Entry-Level Welder,I'm having trouble getting the control panel to register my ID card.
+07:17:05,Construction / Welding Operations,Mack,Senior Welder,Oh that scanner is garbage. Just hit it with a heavy wrench.
+07:17:40,Construction / Welding Operations,Leo,Entry-Level Welder,Really? Won't that break it?
+07:18:15,Construction / Welding Operations,Mack,Senior Welder,"I'm joking, kid, don't actually hit the machine. Just wipe the sensor with a dry cloth."
+07:30:00,Construction / Welding Operations,Leo,Entry-Level Welder,Wiping it worked. Thanks.
+08:45:12,Construction / Welding Operations,John,Intern,Has anyone seen the blueprint for the HVAC layout?
+08:46:05,Construction / Welding Operations,Mack,Senior Welder,"Check the trailer, but honestly, I think the site dog ate it."
+08:47:10,Construction / Welding Operations,John,Intern,We have a site dog?
+08:48:00,Construction / Welding Operations,Sarah,Site Manager,"No, John, he's venting. The blueprints are digitally loaded on your tablet."
+11:30:00,Construction / Welding Operations,Mack,Senior Welder,"I swear, if the cafeteria serves that soggy meatloaf again today, I'm quitting."
+11:31:15,Construction / Welding Operations,Leo,Entry-Level Welder,"Wait, Mack, you're quitting?"
+11:32:00,Construction / Welding Operations,Mack,Senior Welder,"Just venting, Leo. Half the stuff I say is noise."

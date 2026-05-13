@@ -35,3 +35,7 @@ data/
 *.swo
 
 weird_files_from_AI_agent
+*.png
+
+# Ensure the demo data folder is explicitly tracked
+!MinderAI_demo/data/
